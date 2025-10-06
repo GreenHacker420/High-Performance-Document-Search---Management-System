@@ -38,7 +38,7 @@ export const notFound = (req, res) => {
 export const errorHandler = (err, req, res, next) => {
     console.error('Error:', err);
 
-    // Handle Multer errors (e.g., file upload issues)
+    // multer errors handler
     if (err && err.name === 'MulterError') {
         if (err.code === 'LIMIT_FILE_SIZE') {
             return res.status(400).json({ error: 'File too large. Max size is 10MB' });

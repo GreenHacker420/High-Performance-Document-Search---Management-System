@@ -11,20 +11,20 @@ export async function scrapeWebPage(url) {
     const html = await response.text();
     const $ = cheerio.load(html);
     
-    // Remove script and style elements
+    // only basic cleanup
     $('script, style, nav, footer, header').remove();
     
-    // Extract title
+    // title extract 
     const title = $('title').text().trim() || 
                   $('h1').first().text().trim() || 
                   'Untitled';
     
-    // Extract meta description
+    // description extract
     const description = $('meta[name="description"]').attr('content') || 
                        $('meta[property="og:description"]').attr('content') || 
                        '';
     
-    // Extract main content text
+    // content extract
     const contentText = $('body').text()
       .replace(/\s+/g, ' ')
       .trim()

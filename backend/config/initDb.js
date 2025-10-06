@@ -17,10 +17,10 @@ async function initializeDatabase() {
     
     await pool.query(schemaSQL);
     
-    console.log('✅ Database schema initialized successfully!');
+    console.log('Database schema initialized successfully!');
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error initializing database:', error);
+    console.error('Error initializing database:', error);
     process.exit(1);
   }
 }

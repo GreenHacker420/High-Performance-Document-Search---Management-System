@@ -1,5 +1,6 @@
 import fs from 'fs';
 import * as pdfParse from 'pdf-parse';
+// console.log(pdfParse.PDFParse);
 
 
 export async function extractTextFromPDF(filePath) {
