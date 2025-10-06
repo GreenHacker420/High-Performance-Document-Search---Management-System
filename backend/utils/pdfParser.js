@@ -8,6 +8,7 @@ export async function extractTextFromPDF(filePath) {
   try {
     const dataBuffer = fs.readFileSync(filePath);
     const data = await pdfParse(dataBuffer);
+    // console.log(data);
     return data.text;
   } catch (error) {
     console.error('Error extracting text from PDF:', error.message);
