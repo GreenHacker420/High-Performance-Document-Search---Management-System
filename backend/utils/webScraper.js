@@ -20,29 +20,49 @@ export async function scrapeWebPage(url) {
     const $ = cheerio.load(html);
     
     console.log('[WebScraper] HTML loaded, extracting data...');
+    console.log('[WebScraper] HTML preview:', html.substring(0, 500));
     
     // only basic cleanup
     $('script, style, nav, footer, header, iframe, noscript').remove();
     
-    // title extract 
-    const title = $('title').text().trim() || 
-                  $('meta[property="og:title"]').attr('content') ||
-                  $('h1').first().text().trim() || 
-                  'Untitled';
+    // title extract with multiple fallbacks
+    let title = $('title').text().trim();
+    if (!title || title === '') {
+      title = $('meta[property="og:title"]').attr('content') || '';
+    }
+    if (!title || title === '') {
+      title = $('meta[name="twitter:title"]').attr('content') || '';
+    }
+    if (!title || title === '') {
+      title = $('h1').first().text().trim() || '';
+    }
+    if (!title || title === '') {
+      title = 'Untitled';
+    }
     
-    // description extract
-    const description = $('meta[name="description"]').attr('content') || 
-                       $('meta[property="og:description"]').attr('content') ||
-                       $('p').first().text().trim().substring(0, 200) ||
-                       '';
+    // description extract with multiple fallbacks
+    let description = $('meta[name="description"]').attr('content') || '';
+    if (!description || description === '') {
+      description = $('meta[property="og:description"]').attr('content') || '';
+    }
+    if (!description || description === '') {
+      description = $('meta[name="twitter:description"]').attr('content') || '';
+    }
+    if (!description || description === '') {
+      const firstP = $('p').first().text().trim();
+      description = firstP.substring(0, 200);
+    }
     
-    // content extract
+    // content extract - get main content
     const contentText = $('body').text()
       .replace(/\s+/g, ' ')
       .trim()
       .substring(0, 10000); // Limit to 10k characters
     
-    console.log(`[WebScraper] Successfully scraped: ${title.substring(0, 50)}...`);
+    console.log(`[WebScraper] Successfully scraped:`);
+    console.log(`  - Title: ${title}`);
+    console.log(`  - Description: ${description.substring(0, 100)}${description.length > 100 ? '...' : ''}`);
+    console.log(`  - Content length: ${contentText.length} chars`);
     
     return {
       title,
