@@ -229,7 +229,6 @@ const LinkManagement = () => {
         onCancel={() => setModalVisible(false)}
         onOk={() => form.submit()}
         width={800}
-        destroyOnClose
       >
         <Form
           form={form}

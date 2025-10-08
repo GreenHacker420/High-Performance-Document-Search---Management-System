@@ -65,7 +65,6 @@ const PDFViewer = ({ pdfId, fileName, visible, onClose }) => {
           Close
         </Button>
       ]}
-      destroyOnClose
     >
       <div style={{ height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         {loading ? (

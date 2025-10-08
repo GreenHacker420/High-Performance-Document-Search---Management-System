@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, App as AntApp } from 'antd';
 import AdminDashboard from './components/AdminDashboard';
 import PublicSearch from './components/PublicSearch';
 import Navigation from './components/Navigation';
@@ -16,18 +16,20 @@ const App = () => {
         },
       }}
     >
-      <Router>
-        <div className="app">
-          <Navigation />
-          <div className="app-content">
-            <Routes>
-              <Route path="/" element={<Navigate to="/search" replace />} />
-              <Route path="/search" element={<PublicSearch />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-            </Routes>
+      <AntApp>
+        <Router>
+          <div className="app">
+            <Navigation />
+            <div className="app-content">
+              <Routes>
+                <Route path="/" element={<Navigate to="/search" replace />} />
+                <Route path="/search" element={<PublicSearch />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+              </Routes>
+            </div>
           </div>
-        </div>
-      </Router>
+        </Router>
+      </AntApp>
     </ConfigProvider>
   );
 };
