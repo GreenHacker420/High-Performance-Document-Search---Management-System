@@ -37,6 +37,9 @@ export const linkAPI = {
   getById: (id) => 
     api.get(`/links/${id}`),
   
+  scrape: (url) =>
+    api.post('/links/scrape', { url }),
+  
   create: (data) => 
     api.post('/links', data),
   

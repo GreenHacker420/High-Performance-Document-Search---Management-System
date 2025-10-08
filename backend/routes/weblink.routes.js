@@ -3,6 +3,7 @@ import { WebLinkController } from '../controllers/weblink.controller.js';
 
 const router = express.Router();
 
+router.post('/scrape', WebLinkController.scrapePreview);
 router.get('/', WebLinkController.getAll);
 router.get('/:id', WebLinkController.getById);
 router.post('/', WebLinkController.create);

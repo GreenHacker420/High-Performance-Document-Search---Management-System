@@ -2,6 +2,30 @@ import { WebLinkModel } from '../models/weblink.model.js';
 import { scrapeWebPage } from '../utils/webScraper.js';
 
 export const WebLinkController = {
+  // POST /api/links/scrape - Preview scraped data without saving
+  async scrapePreview(req, res) {
+    try {
+      const { url } = req.body;
+      
+      if (!url) {
+        return res.status(400).json({ error: 'URL is required' });
+      }
+      
+      const scrapedData = await scrapeWebPage(url);
+      
+      // Add helpful message if description is empty
+      if (!scrapedData.description || scrapedData.description.trim() === '') {
+        scrapedData.description = 'No description available - please add manually';
+        scrapedData.descriptionEmpty = true;
+      }
+      
+      res.json(scrapedData);
+    } catch (error) {
+      console.error('Error scraping web page:', error);
+      res.status(500).json({ error: error.message || 'Failed to scrape web page' });
+    }
+  },
+
   // GET /api/links
   async getAll(req, res) {
     try {

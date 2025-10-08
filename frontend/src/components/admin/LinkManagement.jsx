@@ -30,6 +30,7 @@ const LinkManagement = () => {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [editingLink, setEditingLink] = useState(null);
+  const [scraping, setScraping] = useState(false);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -62,7 +63,6 @@ const LinkManagement = () => {
     setEditingLink(null);
     setModalVisible(true);
     form.resetFields();
-    form.setFieldsValue({ autoScrape: true });
   };
 
   const handleEdit = (record) => {
@@ -72,7 +72,6 @@ const LinkManagement = () => {
       url: record.url,
       title: record.title,
       description: record.description,
-      autoScrape: false, // Don't auto-scrape when editing
     });
   };
 
@@ -87,13 +86,43 @@ const LinkManagement = () => {
     }
   };
 
+  const handleScrape = async () => {
+    const url = form.getFieldValue('url');
+    if (!url) {
+      message.warning('Please enter a URL first');
+      return;
+    }
+
+    setScraping(true);
+    try {
+      const response = await linkAPI.scrape(url);
+      const { title, description, descriptionEmpty } = response.data;
+      
+      form.setFieldsValue({
+        title: title || '',
+        description: descriptionEmpty ? '' : (description || ''),
+      });
+      
+      if (descriptionEmpty) {
+        message.warning('Title scraped! Description not found - please add manually.');
+      } else {
+        message.success('Content scraped successfully!');
+      }
+    } catch (error) {
+      console.error('Error scraping:', error);
+      message.error(error.response?.data?.error || 'Failed to scrape content');
+    } finally {
+      setScraping(false);
+    }
+  };
+
   const handleSubmit = async (values) => {
     try {
       if (editingLink) {
         await linkAPI.update(editingLink.id, values);
         message.success('Web link updated successfully');
       } else {
-        await linkAPI.create(values);
+        await linkAPI.create({ ...values, autoScrape: false });
         message.success('Web link created successfully');
       }
       setModalVisible(false);
@@ -246,14 +275,25 @@ const LinkManagement = () => {
             <Input 
               placeholder="https://example.com" 
               prefix={<GlobalOutlined />}
+              suffix={
+                <Button 
+                  type="link" 
+                  size="small"
+                  loading={scraping}
+                  onClick={handleScrape}
+                >
+                  Scrape
+                </Button>
+              }
             />
           </Form.Item>
 
           <Form.Item
             name="title"
             label="Title"
+            rules={[{ required: true, message: 'Please enter or scrape the title' }]}
           >
-            <Input placeholder="Enter title (leave empty for auto-scraping)" />
+            <Input placeholder="Enter title or click Scrape button" />
           </Form.Item>
 
           <Form.Item
@@ -262,20 +302,9 @@ const LinkManagement = () => {
           >
             <TextArea
               rows={3}
-              placeholder="Enter description (leave empty for auto-scraping)"
+              placeholder="Enter description or click Scrape button"
             />
           </Form.Item>
-
-          {!editingLink && (
-            <Form.Item
-              name="autoScrape"
-              label="Auto-scrape content"
-              valuePropName="checked"
-              extra="Automatically extract title and description from the webpage"
-            >
-              <Switch />
-            </Form.Item>
-          )}
         </Form>
       </Modal>
     </div>
