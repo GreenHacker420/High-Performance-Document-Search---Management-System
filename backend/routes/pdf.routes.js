@@ -7,13 +7,13 @@ import { config } from '../config/env.js';
 
 const router = express.Router();
 
-// Ensure upload directory exists
+// ensure upload directory exists
 const uploadDir = config.upload.uploadDir;
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-// Configure multer for file uploads
+// configure multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);

@@ -1,7 +1,7 @@
 import { query } from '../config/db.js';
 
 export const WebLinkModel = {
-  // Get all web links with pagination
+  // get all web links with pagination
   async getAll(page = 1, limit = 10) {
     const offset = (page - 1) * limit;
     const result = await query(
@@ -26,7 +26,7 @@ export const WebLinkModel = {
     };
   },
 
-  // Get web link by ID
+  // get web link by ID
   async getById(id) {
     const result = await query(
       'SELECT id, url, title, description, content_text, created_at, updated_at FROM web_links WHERE id = $1',
@@ -35,7 +35,7 @@ export const WebLinkModel = {
     return result.rows[0];
   },
 
-  // Create new web link
+  // create new web link
   async create(linkData) {
     const { url, title, description, content_text } = linkData;
     const result = await query(
@@ -47,7 +47,7 @@ export const WebLinkModel = {
     return result.rows[0];
   },
 
-  // Update web link
+  // update web link
   async update(id, linkData) {
     const { url, title, description, content_text } = linkData;
     const result = await query(
@@ -63,7 +63,7 @@ export const WebLinkModel = {
     return result.rows[0];
   },
 
-  // Delete web link
+  // delete web link
   async delete(id) {
     const result = await query(
       'DELETE FROM web_links WHERE id = $1 RETURNING id',

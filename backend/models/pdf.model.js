@@ -1,7 +1,7 @@
 import { query } from '../config/db.js';
 
 export const PdfModel = {
-  // Get all PDFs with pagination
+  // get all PDFs with pagination
   async getAll(page = 1, limit = 10) {
     const offset = (page - 1) * limit;
     const result = await query(
@@ -26,7 +26,6 @@ export const PdfModel = {
     };
   },
 
-  // Get PDF by ID
   async getById(id) {
     const result = await query(
       'SELECT id, file_name, file_path, content_text, file_size, uploaded_at FROM pdfs WHERE id = $1',
@@ -35,7 +34,7 @@ export const PdfModel = {
     return result.rows[0];
   },
 
-  // Create new PDF record
+  // create new PDF record
   async create(pdfData) {
     const { file_name, file_path, content_text, file_size } = pdfData;
     const result = await query(
@@ -47,7 +46,7 @@ export const PdfModel = {
     return result.rows[0];
   },
 
-  // Delete PDF
+  // delete PDF
   async delete(id) {
     const result = await query(
       'DELETE FROM pdfs WHERE id = $1 RETURNING id, file_path',

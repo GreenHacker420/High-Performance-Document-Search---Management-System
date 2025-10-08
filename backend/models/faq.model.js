@@ -1,6 +1,6 @@
 import { query } from '../config/db.js';
 export const FaqModel = {
-  // Get all FAQs with pagination
+  // get all FAQs with pagination
   async getAll(page = 1, limit = 10) {
     const offset = (page - 1) * limit;
     const result = await query(
@@ -25,7 +25,7 @@ export const FaqModel = {
     };
   },
 
-  // Get FAQ by ID
+  // get FAQ by ID
   async getById(id) {
     const result = await query(
       'SELECT id, title, content, tags, created_at, updated_at FROM faqs WHERE id = $1',
@@ -34,7 +34,7 @@ export const FaqModel = {
     return result.rows[0];
   },
 
-  // Create new FAQ
+  // create new FAQ
   async create(faqData) {
     const { title, content, tags = [] } = faqData;
     const result = await query(
@@ -46,7 +46,7 @@ export const FaqModel = {
     return result.rows[0];
   },
 
-  // Update FAQ
+  // update FAQ
   async update(id, faqData) {
     const { title, content, tags } = faqData;
     const result = await query(
@@ -61,7 +61,7 @@ export const FaqModel = {
     return result.rows[0];
   },
 
-  // Delete FAQ
+  // delete FAQ
   async delete(id) {
     const result = await query(
       'DELETE FROM faqs WHERE id = $1 RETURNING id',
