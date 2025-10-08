@@ -10,7 +10,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "init-db": "node config/initDb.js"
+    "init-db": "node config/initDb.js",
+    "prod": "NODE_ENV=production node server.js",
+    "docker:build": "docker build -t search-backend .",
+    "docker:run": "docker run -p 9000:9000 search-backend"
   },
   "dependencies": {
     "@types/pg": "^8.15.5",

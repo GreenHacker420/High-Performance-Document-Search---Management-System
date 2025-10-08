@@ -4,7 +4,13 @@ const { Pool } = pkg;
 
 import { config } from './env.js';
 
-const pool = new Pool(config.db);
+const pool = new Pool({
+  ...config.db,
+  // Production optimizations
+  max: config.db.max,
+  idleTimeoutMillis: config.db.idleTimeoutMillis,
+  connectionTimeoutMillis: config.db.connectionTimeoutMillis,
+});
 // console.log(pool);
 
 pool.on('connect', () => {

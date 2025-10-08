@@ -4,10 +4,16 @@ import { createClient } from 'redis';
 let redisClient = null;
 let isConnected = false;
 
+
 export const connectCache = async () => {
   try {
     redisClient = createClient({
-      url: process.env.REDIS_URL || 'redis://localhost:6379'
+      url: process.env.REDIS_URL || 'redis://localhost:6379',
+      retry_strategy: (times) => {
+        const delay = Math.min(times * 50, 2000);
+        return delay;
+      },
+      maxRetriesPerRequest: 3,
     });
 
     redisClient.on('error', (err) => {
