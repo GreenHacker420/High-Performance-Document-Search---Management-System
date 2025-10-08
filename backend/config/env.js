@@ -7,20 +7,9 @@ export const config = {
     port: process.env.PORT || 9000,
     env: process.env.NODE_ENV || 'development',
   },
-  db: process.env.DATABASE_URL ? {
-    // Use DATABASE_URL if provided (Coolify/Production)
+  db: {
     connectionString: process.env.DATABASE_URL,
-    ssl: false, // Coolify internal network doesn't need SSL
-    max: process.env.DB_POOL_MAX || 20,
-    idleTimeoutMillis: process.env.DB_IDLE_TIMEOUT || 30000,
-    connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT || 2000,
-  } : {
-    // Use individual variables for local development
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 5432,
-    database: process.env.DB_NAME || 'document_search',
-    user: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'password',
+    ssl: false,
     max: process.env.DB_POOL_MAX || 20,
     idleTimeoutMillis: process.env.DB_IDLE_TIMEOUT || 30000,
     connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT || 2000,
