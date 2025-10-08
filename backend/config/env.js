@@ -10,7 +10,7 @@ export const config = {
   db: process.env.DATABASE_URL ? {
     // Use DATABASE_URL if provided (Coolify/Production)
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    ssl: false, // Coolify internal network doesn't need SSL
     max: process.env.DB_POOL_MAX || 20,
     idleTimeoutMillis: process.env.DB_IDLE_TIMEOUT || 30000,
     connectionTimeoutMillis: process.env.DB_CONNECTION_TIMEOUT || 2000,
