@@ -69,10 +69,13 @@ export const pdfAPI = {
     }),
 };
 
-// Search API
+
 export const searchAPI = {
   search: (query, type = '', limit = 20) => 
     api.get(`/search?q=${encodeURIComponent(query)}&type=${type}&limit=${limit}`),
+  
+  getSuggestions: (partialQuery) =>
+    api.get(`/search/suggestions?q=${encodeURIComponent(partialQuery)}`),
 };
 
 export default api;
