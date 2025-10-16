@@ -5,7 +5,7 @@ export const WebLinkModel = {
   async getAll(page = 1, limit = 10) {
     const offset = (page - 1) * limit;
     const result = await query(
-      `SELECT id, url, title, description, created_at, updated_at 
+      `SELECT id, url, title, description, content_text, created_at, updated_at 
        FROM web_links 
        ORDER BY created_at DESC 
        LIMIT $1 OFFSET $2`,
